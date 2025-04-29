@@ -1,4 +1,4 @@
-﻿namespace InspectionTemplate.Controllers.DtoFactory;
+namespace InspectionShowInspectionDetails.Controllers.DtoFactory;
 public interface IDtoFactory
 {
     object CreateDto(string dtoType, params object[] args);

@@ -1,9 +1,9 @@
-﻿using InspectionTemplate.Controllers.DtoFactory;
+using InspectionShowInspectionDetails.Controllers.DtoFactory;
 using Microsoft.AspNetCore.Mvc;
 using NServiceBus;
 using System.Threading.Tasks;
 
-namespace InspectionTemplate.Controllers
+namespace InspectionShowInspectionDetails.Controllers
 {
     public class BaseController : ControllerBase
     {

@@ -5,12 +5,12 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /app
 
 # Copy the solution file and project files
-COPY Inspection-Template.Process.sln ./  
-COPY Inspection-Template.Channel/*.csproj ./Inspection-Template.Channel/
-COPY Inspection-Template.Controllers/*.csproj ./Inspection-Template.Controllers/
-COPY Inspection-Template.Messages/*.csproj ./Inspection-Template.Messages/
-COPY Inspection-Template.Handlers/*.csproj ./Inspection-Template.Handlers/
-COPY Inspection-Template.Process/*.csproj ./Inspection-Template.Process/
+COPY Inspection-ShowInspectionDetails.Process.sln ./  
+COPY Inspection-ShowInspectionDetails.Channel/*.csproj ./Inspection-ShowInspectionDetails.Channel/
+COPY Inspection-ShowInspectionDetails.Controllers/*.csproj ./Inspection-ShowInspectionDetails.Controllers/
+COPY Inspection-ShowInspectionDetails.Messages/*.csproj ./Inspection-ShowInspectionDetails.Messages/
+COPY Inspection-ShowInspectionDetails.Handlers/*.csproj ./Inspection-ShowInspectionDetails.Handlers/
+COPY Inspection-ShowInspectionDetails.Process/*.csproj ./Inspection-ShowInspectionDetails.Process/
 
 # Copy appsettings.json file (ensure it exists in the root of your project)
 COPY appsettings.json /app/appsettings.json
@@ -40,7 +40,7 @@ COPY --from=build-env /out .
 COPY appsettings.json /app/appsettings.json
 
 # Default Service Port
-EXPOSE 5000
+EXPOSE 5023
 
 # Set the entry point to the application
-ENTRYPOINT ["dotnet", "Inspection-Template.Process.dll"]
+ENTRYPOINT ["dotnet", "Inspection-ShowInspectionDetails.Process.dll"]
