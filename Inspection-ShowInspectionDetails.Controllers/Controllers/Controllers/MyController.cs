@@ -5,20 +5,23 @@ using InspectionShowInspectionDetails.Controllers.DtoFactory;
 namespace InspectionShowInspectionDetails.Controllers
 {
     [ApiController]
-    [Route("Api/Controllers")]
+    [Route("Api/ShowInspectionDetails")]
     public class MyController : BaseController
     {
         public MyController(IMessageSession messageSession, IDtoFactory dtoFactory)
             : base(messageSession, dtoFactory) { }
 
-        [HttpPost("Message")]
-        public async Task<IActionResult> AddAccount([FromBody] MessageRequest dto)
+        [HttpGet("GetInspectionDetails")]
+        public async Task<IActionResult> GetInspection(string username)
         {
-            var loginDto = (MessageRequest)_dtoFactory.UseDto("messagedto", dto);
 
             try
             {
-                var response = await _messageSession.Request<MessageResponse>(loginDto);
+                ShowInspectionDetailsRequest dto = new ShowInspectionDetailsRequest
+                {
+                   Email = username
+                };
+                var response = await _messageSession.Request<ShowInspectionDetailsResponse>(dto);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -26,6 +29,8 @@ namespace InspectionShowInspectionDetails.Controllers
                 return StatusCode(500, $"Internal server error while processing the request: {ex.Message}");
             }
         }
+
+
     }
 
 }

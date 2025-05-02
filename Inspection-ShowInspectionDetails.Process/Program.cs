@@ -19,6 +19,18 @@ builder.Services.AddScoped<MongoConnect>(provider =>
     var connectionString = appConfig.GetSetting("ConnectionStrings:DefaultConnection");
     return new MongoConnect(connectionString);
 });
+builder.Services.AddScoped<UserService>(provider =>
+{
+    var connectionString = appConfig.GetSetting("ConnectionStrings:DefaultConnection");
+    return new UserService(connectionString);
+});
+
+builder.Services.AddScoped<InspectionDetailsService>(provider =>
+{
+    var connectionString = appConfig.GetSetting("ConnectionStrings:DefaultConnection");
+    return new InspectionDetailsService(connectionString);
+});
+
 
 builder.Services.AddScoped<MyHandler>();
 
@@ -37,6 +49,15 @@ builder.Services.AddCors(options =>
 });
 
 var endpointConfiguration = new EndpointConfiguration("NServiceBusHandlers");
+
+// Disable Immediate Retries
+var recoverability = endpointConfiguration.Recoverability();
+recoverability.Immediate(immediate => immediate.NumberOfRetries(0));
+
+// Disable Delayed Retries
+recoverability.Delayed(delayed => delayed.NumberOfRetries(0));
+
+
 string instanceId = Environment.MachineName;
 endpointConfiguration.MakeInstanceUniquelyAddressable(instanceId);
 endpointConfiguration.EnableCallbacks();
@@ -63,8 +84,8 @@ if (builder.Environment.IsDevelopment())
 {
     builder.WebHost.ConfigureKestrel(options =>
     {
-        options.ListenAnyIP(5003);
-        options.ListenAnyIP(5004, listenOptions =>
+        options.ListenAnyIP(5023);
+        options.ListenAnyIP(5024, listenOptions =>
         {
             listenOptions.UseHttps();
         });
@@ -75,14 +96,14 @@ else
 {
     builder.WebHost.ConfigureKestrel(options =>
     {
-        options.ListenAnyIP(5003);
+        options.ListenAnyIP(5023);
     });
     transport.StorageDirectory("/home/ubuntu/storage");
 
 }
 
 var routing = transport.Routing();
-routing.RouteToEndpoint(typeof(MessageRequest), "NServiceBusHandlers");
+routing.RouteToEndpoint(typeof(ShowInspectionDetailsRequest), "NServiceBusHandlers");
 
 var scanner = endpointConfiguration.AssemblyScanner().ScanFileSystemAssemblies = true;
 
